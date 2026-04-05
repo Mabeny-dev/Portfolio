@@ -55,3 +55,51 @@ export default prisma
 
 Migration: `npx prisma migrate dev --name init`
 Generation: `npx prisma generate`
+
+## 5. Folder structure
+
+portfolio-backend/
+│
+├── src/
+│ ├── server.js # Main entry point
+│ │
+│ ├── controllers/
+│ │ ├── admin/
+│ │ │ └── authController.js # Admin login, get current admin
+│ │ │
+│ │ ├── aboutController.js # About content CRUD
+│ │ ├── articleController.js # Articles CRUD & publishing
+│ │ ├── contactController.js # Contact messages handling
+│ │ ├── dashboardController.js # Dashboard statistics
+│ │ ├── heroController.js # Hero content CRUD
+│ │ ├── projectController.js # Projects CRUD & publishing
+│ │ └── testimonialController.js # Testimonials CRUD & visibility
+│ │
+│ ├── routes/
+│ │ ├── adminRoutes.js # Protected admin endpoints
+│ │ └── publicRoutes.js # Public portfolio endpoints
+│ │
+│ ├── middleware/
+│ │ ├── auth.js # Authentication middleware
+│ │ └── errorHandler.js # Global error handler
+│ │
+│ ├── utils/
+│ │ └── prisma.js # Prisma client instance
+│ │
+│ └── generated/ # Prisma generated client (auto-generated)
+│ └── prisma/
+│ └── (prisma client files)
+│
+├── prisma/
+│ ├── schema.prisma # Your database schema
+│ └── migrations/ # Prisma migration files (auto-generated)
+│ └── (migration folders)
+│
+├── scripts/
+│ └── setup.js # Initial setup script (create admin & default content)
+│
+├── .env # Environment variables
+├── .gitignore # Git ignore file
+├── package.json # NPM dependencies
+├── package-lock.json # Lock file
+└── README.md # Project documentation

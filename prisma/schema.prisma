@@ -17,7 +17,7 @@ model Admin {
   name      String?
   password  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt DateTime @updatedAt
 }
 
 /////////////////////////////////
@@ -167,6 +167,7 @@ model Project {
   description String        @db.Text
   year        String
   status      PublishStatus @default(DRAFT)
+  isVisible   Boolean       @default(true)
   tags        String[]
   githubUrl   String?
   liveUrl     String?

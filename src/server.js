@@ -1,6 +1,8 @@
 import express from "express";
 import { connectDB, disconnectDB } from "../prisma/db.js";
-import authRoutes from "./routes/authRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import publicRoutes from "./routes/publicRoutes.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,8 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 // Database connection
 connectDB();
 
-// API routes
-app.use("/auth", authRoutes);
+// Routes
+app.use("/api", publicRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port: ${PORT}`);

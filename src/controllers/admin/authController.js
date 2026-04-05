@@ -1,9 +1,9 @@
-import prisma from "../../prisma/prisma.client.js";
+import prisma from "../../../prisma/prisma.client.js";
 import bcrypt from "bcryptjs";
-import { generateToken } from "../utils/generateToken.js";
+import { generateToken } from "../../utils/generateToken.js";
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   // Check if the user exists in the DB
   const userExists = await prisma.admin.findUnique({
     where: { email: email },
@@ -22,6 +22,7 @@ const register = async (req, res) => {
     data: {
       email,
       password: hashedPassword,
+      name: name,
     },
   });
 
@@ -32,7 +33,6 @@ const register = async (req, res) => {
       admin: {
         id: user.id,
         email: email,
-        password: hashedPassword,
       },
       token,
     },
