@@ -39,32 +39,34 @@ const register = async (req, res) => {
   });
 };
 
+// Admin login
 const login = async (req, res) => {
-  // Check if the user email exists in the table
+  // Check admin exists
   const { email, password } = req.body;
-  const user = await prisma.admin.findUnique({
+
+  const admin = await prisma.admin.findUnique({
     where: { email: email },
   });
 
-  if (!user) {
+  if (!admin) {
     return res.status(401).json({
       error: "Invalid email or password",
     });
   }
   // Verify the password
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, admin.password);
   if (!isPasswordValid) {
     return res.status(401).json({
       error: "Invalid email or password",
     });
   }
   // Generate a token
-  const token = generateToken(user.id, res);
+  const token = generateToken(admin.id, res);
   return res.status(201).json({
     data: {
       status: "SUCCESS",
       admin: {
-        id: user.id,
+        id: admin.id,
         email: email,
       },
       token,

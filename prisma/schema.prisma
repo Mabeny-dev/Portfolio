@@ -127,9 +127,8 @@ model ContactMessage {
   createdAt DateTime @default(now())
 
   // Analytics: User location
-  ipAddress String?
-  country   String?
-  city      String?
+  visitorId String?
+  visitor   Visitor? @relation(fields: [visitorId], references: [id], onDelete: SetNull)
 
   @@index([read]) // For unread count and filter
   @@index([createdAt(sort: Desc)]) // For sorting 
@@ -173,4 +172,28 @@ model Project {
   liveUrl     String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+/////////////////////////////////
+//        VISITOR
+/////////////////////////////////
+
+model Visitor {
+  id          String           @id @default(uuid())
+  ipAddress   String
+  country     String?
+  city        String?
+  userAgent   String?
+  countryCode String?
+  createdAt   DateTime         @default(now())
+  visits      SiteVisit[]
+  messages    ContactMessage[]
+}
+
+model SiteVisit {
+  id        String  @id @default(uuid())
+  visitorId String
+  visitor   Visitor @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }

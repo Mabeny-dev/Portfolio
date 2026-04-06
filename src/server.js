@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 // Routes
-app.use("/api", publicRoutes);
+app.use("/api/public", publicRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.listen(PORT, () => {
