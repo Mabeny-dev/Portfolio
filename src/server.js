@@ -6,6 +6,9 @@ import publicRoutes from "./routes/publicRoutes.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy headers so req.ip reflects the original client IP in deployment.
+app.set("trust proxy", true);
+
 //Body parsing middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
