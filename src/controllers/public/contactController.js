@@ -22,7 +22,7 @@ const sendMessage = async (req, res) => {
     const visitor = await getOrCreateVisitor(ip, req);
     console.log(visitor);
 
-    // 3. Save Message and link to Visitor
+    // 4. Save Message and link to Visitor
     const newMessage = await prisma.contactMessage.create({
       data: {
         name,
