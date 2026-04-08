@@ -1,4 +1,5 @@
 import prisma from "../../../prisma/prisma.client.js";
+import { getClientIp } from "../../utils/getClientIp.js";
 import { getOrCreateVisitor } from "../../utils/getOrCreateVisitor.js";
 
 const sendMessage = async (req, res) => {
@@ -10,24 +11,22 @@ const sendMessage = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    //2. Get user's IP
-    const rawIp = req.ip || req.socket.remoteAddress;
+    // Use the forwarded IP in production and normalize IPv4-mapped IPv6 addresses.
+    const ip = getClientIp(req);
 
-    console.log(rawIp);
-    // Clean IPv6 format (e.g. ::ffff:127.0.0.1 → 127.0.0.1)
-    const ip = rawIp?.replace("::ffff:", "")?.trim();
-    console.log(ip);
-
-    // 3. Get or create a vistor
+    // 3. Get or create a visitor
     const visitor = await getOrCreateVisitor(ip, req);
-    console.log(visitor);
 
-    // 4. Save Message and link to Visitor
+    // 4. Save the message with both a stable snapshot of the sender's location
+    // and the visitor relation for future analytics queries.
     const newMessage = await prisma.contactMessage.create({
       data: {
         name,
         email,
         message,
+        senderCountry: visitor.country,
+        senderCity: visitor.city,
+        senderCountryCode: visitor.countryCode,
         visitorId: visitor.id,
       },
     });

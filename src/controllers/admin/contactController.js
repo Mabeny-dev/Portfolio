@@ -8,14 +8,34 @@ const getMessages = async (req, res) => {
   try {
     const messages = await prisma.contactMessage.findMany({
       include: {
-        visitor: true,
+        visitor: {
+          select: {
+            id: true,
+            ipAddress: true,
+            country: true,
+            city: true,
+            countryCode: true,
+            userAgent: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    res.json(messages);
+    // Always return a location object so the frontend can render one consistent shape.
+    const messagesWithLocation = messages.map((message) => ({
+      ...message,
+      location: {
+        country: message.senderCountry || message.visitor?.country || "Unknown",
+        city: message.senderCity || message.visitor?.city || "Unknown",
+        countryCode:
+          message.senderCountryCode || message.visitor?.countryCode || "UN",
+      },
+    }));
+
+    res.json(messagesWithLocation);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

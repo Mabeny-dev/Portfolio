@@ -126,12 +126,19 @@ model ContactMessage {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  // Analytics: User location
+  // Snapshot the sender's location at message time so old messages
+  // still display the original country/city even if the visitor record changes later.
+  senderCountry     String?
+  senderCity        String?
+  senderCountryCode String?
+
+  // Keep the relation as well so the admin can inspect the linked visitor record if needed.
   visitorId String?
   visitor   Visitor? @relation(fields: [visitorId], references: [id], onDelete: SetNull)
 
   @@index([read]) // For unread count and filter
   @@index([createdAt(sort: Desc)]) // For sorting 
+  @@index([senderCountryCode])
 }
 
 /////////////////////////////////
@@ -188,6 +195,9 @@ model Visitor {
   createdAt   DateTime         @default(now())
   visits      SiteVisit[]
   messages    ContactMessage[]
+
+  @@index([ipAddress])
+  @@index([countryCode])
 }
 
 model SiteVisit {
@@ -196,4 +206,7 @@ model SiteVisit {
   visitor   Visitor @relation(fields: [visitorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@index([visitorId])
+  @@index([createdAt(sort: Desc)])
 }

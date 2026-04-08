@@ -4,6 +4,7 @@ import {
   login,
   logout,
 } from "../controllers/admin/authController.js";
+import { protect } from "../middleware/authMiddleware.js";
 import {
   getHeroContent,
   updateHeroContent,
@@ -19,27 +20,31 @@ import {
   getMessageStats,
   markAsRead,
 } from "../controllers/admin/contactController.js";
+import { getSiteAnalytics } from "../controllers/admin/analyticsController.js";
 
 const router = express.Router();
 
 // The routes
 router.post("/register", register);
 router.post("/login", login);
-router.post("/logout", logout);
+router.post("/logout", protect, logout);
 
 // Hero Content
-router.get("/hero", getHeroContent);
-router.put("/hero", updateHeroContent);
+router.get("/hero", protect, getHeroContent);
+router.put("/hero", protect, updateHeroContent);
 
 // Project routes
-router.post("/projects", createProject);
-router.get("/projects", getProjectsAdmin);
-router.put("/projects/:id", updateProject);
-router.delete("/projects/:id", deleteProject);
+router.post("/projects", protect, createProject);
+router.get("/projects", protect, getProjectsAdmin);
+router.put("/projects/:id", protect, updateProject);
+router.delete("/projects/:id", protect, deleteProject);
 
 // Message routes
-router.get("/messages", getMessages);
-router.get("/messages/stats", getMessageStats);
-router.put("/messages/:id", markAsRead);
+router.get("/messages", protect, getMessages);
+router.get("/messages/stats", protect, getMessageStats);
+router.put("/messages/:id", protect, markAsRead);
+
+// Analytics routes
+router.get("/analytics/site-visits", protect, getSiteAnalytics);
 
 export default router;

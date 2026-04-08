@@ -4,10 +4,11 @@ import jwt from "jsonwebtoken";
 // Protect admin routes
 const protect = async (req, res, next) => {
   let token;
+  const authorizationHeader = req.headers?.authorization;
 
-  // Extract token from the header
-  if (req.headers?.authorization.startsWith("Bearer")) {
-    token = req.headers.authorization.split(" ")[1];
+  // Only read the token when the Authorization header exists and uses the Bearer format.
+  if (authorizationHeader?.startsWith("Bearer ")) {
+    token = authorizationHeader.split(" ")[1];
   }
 
   if (!token) {
@@ -26,9 +27,13 @@ const protect = async (req, res, next) => {
     if (!admin) {
       return res.status(401).json({ message: "Admin not found!" });
     }
-    // Attach admin to request
+
+    // Attach the authenticated admin, then continue to the protected route handler.
     req.admin = admin;
+    return next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
+
+export { protect };
