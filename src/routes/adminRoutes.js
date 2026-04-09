@@ -21,6 +21,18 @@ import {
   markAsRead,
 } from "../controllers/admin/contactController.js";
 import { getSiteAnalytics } from "../controllers/admin/analyticsController.js";
+import {
+  createArticle,
+  deleteArticle,
+  getArticlesAdmin,
+  updateArticle,
+} from "../controllers/admin/articleController.js";
+import {
+  createTestimonial,
+  deleteTestimonial,
+  getTestimonialAdmin,
+  updateTestimonial,
+} from "../controllers/admin/testimonialsController.js";
 
 const router = express.Router();
 
@@ -46,5 +58,17 @@ router.put("/messages/:id", protect, markAsRead);
 
 // Analytics routes
 router.get("/analytics/site-visits", protect, getSiteAnalytics);
+
+// Articles routes
+router.get("/articles", protect, getArticlesAdmin);
+router.post("/articles", protect, createArticle);
+router.put("/articles/:id", protect, updateArticle);
+router.delete("/articles/:id", protect, deleteArticle);
+
+// Testimonial routes
+router.get("/testimonials", protect, getTestimonialAdmin);
+router.post("/testimonials", protect, createTestimonial);
+router.put("/testimonials/:id", protect, updateTestimonial);
+router.delete("/testimonials/:id", protect, deleteTestimonial);
 
 export default router;

@@ -3,6 +3,8 @@ import { getHeroContent } from "../controllers/heroController.js";
 import { recordSiteVisit } from "../controllers/public/analyticsController.js";
 import { getProjects } from "../controllers/public/projectController.js";
 import { sendMessage } from "../controllers/public/contactController.js";
+import { getArticlePublic } from "../controllers/public/articleController.js";
+import { getTestimonialPublic } from "../controllers/public/testimonialsController.js";
 
 const router = express.Router();
 
@@ -11,5 +13,7 @@ router.post("/visit", recordSiteVisit);
 router.get("/hero", getHeroContent);
 router.get("/projects", getProjects);
 router.post("/messages", sendMessage);
+router.get("/articles", getArticlePublic);
+router.get("/testimonials", getTestimonialPublic);
 
 export default router;
