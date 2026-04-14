@@ -5,6 +5,7 @@ import { getProjects } from "../controllers/public/projectController.js";
 import { sendMessage } from "../controllers/public/contactController.js";
 import { getArticlePublic } from "../controllers/public/articleController.js";
 import { getTestimonialPublic } from "../controllers/public/testimonialsController.js";
+import { getAboutPublic } from "../controllers/public/aboutController.js";
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.get("/projects", getProjects);
 router.post("/messages", sendMessage);
 router.get("/articles", getArticlePublic);
 router.get("/testimonials", getTestimonialPublic);
+router.get("/about", getAboutPublic);
 
 export default router;

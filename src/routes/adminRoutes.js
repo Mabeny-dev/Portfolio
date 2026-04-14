@@ -33,6 +33,12 @@ import {
   getTestimonialAdmin,
   updateTestimonial,
 } from "../controllers/admin/testimonialsController.js";
+import {
+  createAbout,
+  deleteAbout,
+  getAboutAdmin,
+  updateAbout,
+} from "../controllers/admin/aboutController.js";
 
 const router = express.Router();
 
@@ -70,5 +76,11 @@ router.get("/testimonials", protect, getTestimonialAdmin);
 router.post("/testimonials", protect, createTestimonial);
 router.put("/testimonials/:id", protect, updateTestimonial);
 router.delete("/testimonials/:id", protect, deleteTestimonial);
+
+// About content routes
+router.get("/about", protect, getAboutAdmin);
+router.post("/about", protect, createAbout);
+router.put("/about/:id", protect, updateAbout);
+router.delete("/about/:id", protect, deleteAbout);
 
 export default router;
