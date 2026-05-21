@@ -1,13 +1,17 @@
 import jwt from "jsonwebtoken";
+
 export const generateToken = (userId, res) => {
   const payload = { id: userId };
+  const jwtSecret = process.env.JWT_SECRET;
 
-  //Generate the token
-  const token = jwt.sign(payload, process.env.JWT_SECRET || "7d", {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET is required");
+  }
+
+  const token = jwt.sign(payload, jwtSecret, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
   });
 
-  // Store it in a cookie
   res.cookie("jwt", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

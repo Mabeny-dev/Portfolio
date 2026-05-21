@@ -4,7 +4,6 @@ import { getOrCreateVisitor } from "../../utils/getOrCreateVisitor.js";
 
 const sendMessage = async (req, res) => {
   try {
-    //1. Extract data from request body
     const { name, email, message } = req.body;
 
     if (!name || !email || !message) {
@@ -14,10 +13,9 @@ const sendMessage = async (req, res) => {
     // Use the forwarded IP in production and normalize IPv4-mapped IPv6 addresses.
     const ip = getClientIp(req);
 
-    // 3. Get or create a visitor
     const visitor = await getOrCreateVisitor(ip, req);
 
-    // 4. Save the message with both a stable snapshot of the sender's location
+    // Save the message with both a stable snapshot of the sender's location
     // and the visitor relation for future analytics queries.
     const newMessage = await prisma.contactMessage.create({
       data: {
@@ -34,7 +32,7 @@ const sendMessage = async (req, res) => {
     res.status(201).json(newMessage);
   } catch (err) {
     console.error("sendMessage failed:", err);
-    return res.status(500).json({ err: "failed to send message!" });
+    return res.status(500).json({ message: "Failed to send message" });
   }
 };
 

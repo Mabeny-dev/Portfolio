@@ -8,7 +8,7 @@ import { protect } from "../middleware/authMiddleware.js";
 import {
   getHeroContent,
   updateHeroContent,
-} from "../controllers/heroController.js";
+} from "../controllers/admin/heroController.js";
 import {
   createProject,
   deleteProject,
@@ -42,7 +42,6 @@ import {
 
 const router = express.Router();
 
-// The routes
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", protect, logout);

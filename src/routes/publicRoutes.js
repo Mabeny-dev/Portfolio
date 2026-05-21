@@ -1,5 +1,5 @@
 import express from "express";
-import { getHeroContent } from "../controllers/heroController.js";
+import { getHeroContent } from "../controllers/admin/heroController.js";
 import { recordSiteVisit } from "../controllers/public/analyticsController.js";
 import { getProjects } from "../controllers/public/projectController.js";
 import { sendMessage } from "../controllers/public/contactController.js";

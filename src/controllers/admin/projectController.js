@@ -1,32 +1,37 @@
 import prisma from "../../../prisma/prisma.client.js";
-//////////////////////////
-/////// ADMIN
-//////////////////////////
-//CREATE Project
+
 const createProject = async (req, res) => {
   try {
+    const { title, description, year, tags } = req.body;
+
+    if (!title || !description || !year || !Array.isArray(tags)) {
+      return res.status(400).json({
+        message: "title, description, year, and tags are required",
+      });
+    }
+
     const project = await prisma.project.create({
       data: req.body,
     });
+
     return res.status(201).json({ status: "SUCCESS", data: project });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-// GET all Projects (Admin Sees all the projects)
 const getProjectsAdmin = async (req, res) => {
   try {
-    const project = await prisma.project.findMany({
+    const projects = await prisma.project.findMany({
       orderBy: { createdAt: "desc" },
     });
-    return res.status(200).json(project);
+
+    return res.status(200).json(projects);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-// UPDATE project
 const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
@@ -35,13 +40,17 @@ const updateProject = async (req, res) => {
       where: { id },
       data: req.body,
     });
-    return res.status(200).json({ status: "SUCCESS", data: { updated } });
+
+    return res.status(200).json({ status: "SUCCESS", data: updated });
   } catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
     return res.status(500).json({ message: error.message });
   }
 };
 
-// DELETE project
 const deleteProject = async (req, res) => {
   try {
     const { id } = req.params;
@@ -49,8 +58,16 @@ const deleteProject = async (req, res) => {
     await prisma.project.delete({
       where: { id },
     });
-    return res.status(200).json({ message: "Deleted successfully " });
+
+    return res.status(200).json({
+      status: "SUCCESS",
+      message: "Project deleted successfully",
+    });
   } catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
     return res.status(500).json({ message: error.message });
   }
 };

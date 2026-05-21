@@ -3,75 +3,89 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../../utils/generateToken.js";
 
 const register = async (req, res) => {
-  const { email, password, name } = req.body;
-  // Check if the user exists in the DB
-  const userExists = await prisma.admin.findUnique({
-    where: { email: email },
-  });
+  try {
+    const { email, password, name } = req.body;
 
-  if (userExists) {
-    return res.status(400).json({ error: "This email already exists" });
-  }
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
 
-  // Hash the password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+    const userExists = await prisma.admin.findUnique({
+      where: { email },
+    });
 
-  // Create the user
-  const user = await prisma.admin.create({
-    data: {
-      email,
-      password: hashedPassword,
-      name: name,
-    },
-  });
+    if (userExists) {
+      return res.status(400).json({ error: "This email already exists" });
+    }
 
-  const token = generateToken(user.id, res);
-  return res.status(201).json({
-    data: {
-      status: "SUCCESS",
-      admin: {
-        id: user.id,
-        email: email,
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await prisma.admin.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name,
       },
-      token,
-    },
-  });
+    });
+
+    const token = generateToken(user.id, res);
+
+    return res.status(201).json({
+      data: {
+        status: "SUCCESS",
+        admin: {
+          id: user.id,
+          email,
+        },
+        token,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
-// Admin login
 const login = async (req, res) => {
-  // Check admin exists
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const admin = await prisma.admin.findUnique({
-    where: { email: email },
-  });
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
 
-  if (!admin) {
-    return res.status(401).json({
-      error: "Invalid email or password",
+    const admin = await prisma.admin.findUnique({
+      where: { email },
     });
-  }
-  // Verify the password
-  const isPasswordValid = await bcrypt.compare(password, admin.password);
-  if (!isPasswordValid) {
-    return res.status(401).json({
-      error: "Invalid email or password",
-    });
-  }
-  // Generate a token
-  const token = generateToken(admin.id, res);
-  return res.status(201).json({
-    data: {
-      status: "SUCCESS",
-      admin: {
-        id: admin.id,
-        email: email,
+
+    if (!admin) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    const token = generateToken(admin.id, res);
+
+    return res.status(200).json({
+      data: {
+        status: "SUCCESS",
+        admin: {
+          id: admin.id,
+          email,
+        },
+        token,
       },
-      token,
-    },
-  });
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 const logout = async (req, res) => {

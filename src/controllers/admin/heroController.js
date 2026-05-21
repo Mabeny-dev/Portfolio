@@ -1,6 +1,5 @@
-import prisma from "../../prisma/prisma.client.js";
+import prisma from "../../../prisma/prisma.client.js";
 
-// Get hero content
 const getHeroContent = async (req, res) => {
   try {
     const hero = await prisma.heroContent.findUnique({
@@ -19,16 +18,30 @@ const getHeroContent = async (req, res) => {
 
 const updateHeroContent = async (req, res) => {
   const { badge, firstName, secondName, phrases, subtitle } = req.body;
+
+  if (!badge || !firstName || !secondName || !subtitle || !Array.isArray(phrases)) {
+    return res.status(400).json({
+      message: "badge, firstName, secondName, phrases, and subtitle are required",
+    });
+  }
+
   try {
     const hero = await prisma.heroContent.upsert({
       where: { uniqueKey: "hero" },
-      update: { badge, firstName, secondName, subtitle },
-      create: { badge, firstName, secondName, subtitle, uniqueKey: "hero" },
+      update: { badge, firstName, secondName, phrases, subtitle },
+      create: {
+        badge,
+        firstName,
+        secondName,
+        phrases,
+        subtitle,
+        uniqueKey: "hero",
+      },
     });
 
-    res.json(hero);
+    return res.json(hero);
   } catch (error) {
-    return res.status(500).json({ erro: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
