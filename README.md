@@ -106,32 +106,33 @@ GET /health
 
 Public routes are mounted under `/api/public`.
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/hero` | Get hero content |
-| `GET` | `/projects` | Get published visible projects |
-| `GET` | `/articles` | Get published articles |
-| `GET` | `/testimonials` | Get visible testimonials |
-| `GET` | `/about` | Get about page content |
-| `POST` | `/messages` | Submit a contact message |
-| `POST` | `/visit` | Record a site visit |
+| Method | Route           | Purpose                        |
+| ------ | --------------- | ------------------------------ |
+| `GET`  | `/hero`         | Get hero content               |
+| `GET`  | `/projects`     | Get published visible projects |
+| `GET`  | `/articles`     | Get published articles         |
+| `GET`  | `/testimonials` | Get visible testimonials       |
+| `GET`  | `/about`        | Get about page content         |
+| `POST` | `/messages`     | Submit a contact message       |
+| `POST` | `/visit`        | Record a site visit            |
 
 Admin routes are mounted under `/api/admin`. Protected routes require an `Authorization: Bearer <token>` header.
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `POST` | `/register` | Create an admin account |
-| `POST` | `/login` | Log in and receive a token |
-| `POST` | `/logout` | Clear the auth cookie |
-| `GET`, `PUT` | `/hero` | Read/update hero content |
-| `GET`, `POST`, `PUT`, `DELETE` | `/projects` | Manage projects |
-| `GET`, `POST`, `PUT`, `DELETE` | `/articles` | Manage articles |
-| `GET`, `POST`, `PUT`, `DELETE` | `/testimonials` | Manage testimonials |
-| `GET`, `POST`, `PUT`, `DELETE` | `/about` | Manage about content |
-| `GET` | `/messages` | View contact messages |
-| `GET` | `/messages/stats` | View message totals |
-| `PUT` | `/messages/:id` | Mark a message as read |
-| `GET` | `/analytics/site-visits` | View visit analytics |
+| Method                         | Route                      | Purpose                                                                                          |
+| ------------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `POST`                         | `/register`                | Create an admin account                                                                          |
+| `POST`                         | `/login`                   | Log in and receive a token                                                                       |
+| `POST`                         | `/logout`                  | Clear the auth cookie                                                                            |
+| `GET`, `PUT`                   | `/hero`                    | Read/update hero content                                                                         |
+| `GET`, `POST`, `PUT`, `DELETE` | `/projects`                | Manage projects                                                                                  |
+| `GET`, `POST`, `PUT`, `DELETE` | `/articles`                | Manage articles                                                                                  |
+| `GET`, `POST`, `PUT`, `DELETE` | `/testimonials`            | Manage testimonials                                                                              |
+| `GET`, `POST`, `PUT`, `DELETE` | `/about`                   | Manage about content                                                                             |
+| `GET`                          | `/messages`                | View contact messages                                                                            |
+| `GET`                          | `/messages/stats`          | View message totals                                                                              |
+| `PUT`                          | `/messages/:id`            | Mark a message as read                                                                           |
+| `GET`                          | `/analytics/site-visits`   | View visit analytics                                                                             |
+| `GET`                          | `/api/public/github-stats` | Get commit count for current year, total projects, and technologies used across all public repos |
 
 For `PUT` and `DELETE` routes that operate on a single item, pass the item id as `/:id`.
 
