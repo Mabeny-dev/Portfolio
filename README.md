@@ -1,4 +1,4 @@
-# Mabeny Portfolio Backend
+# Portfolio Backend
 
 Express and Prisma backend for the Mabeny portfolio website. It provides public portfolio content APIs, admin-only content management APIs, contact message storage, and basic visitor analytics.
 
