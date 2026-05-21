@@ -6,6 +6,7 @@ import { sendMessage } from "../controllers/public/contactController.js";
 import { getArticlePublic } from "../controllers/public/articleController.js";
 import { getTestimonialPublic } from "../controllers/public/testimonialsController.js";
 import { getAboutPublic } from "../controllers/public/aboutController.js";
+import { getYearlyGitHubStats } from "../controllers/public/githubController.js";
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.post("/messages", sendMessage);
 router.get("/articles", getArticlePublic);
 router.get("/testimonials", getTestimonialPublic);
 router.get("/about", getAboutPublic);
+router.get("/gitHubStats", getYearlyGitHubStats);
 
 export default router;
