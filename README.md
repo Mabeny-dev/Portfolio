@@ -45,6 +45,7 @@ Optional variables:
 - `NODE_ENV`: Use `production` in deployment.
 - `CLIENT_URLS`: Comma-separated allowed frontend origins for CORS.
 - `JWT_EXPIRES_IN`: Token lifetime. Defaults to `7d`.
+- `REQUEST_BODY_LIMIT`: Maximum JSON/form payload size. Defaults to `50mb`.
 
 ## Scripts
 
@@ -102,6 +103,12 @@ GET /health
 - Run `npm install`, `npm run db:generate`, and `npm run db:deploy`.
 - Start with `npm start`.
 
+## Performance Notes
+
+- Public product and service queries are indexed by `status`, `isVisible`, and descending `createdAt`.
+- Public endpoints return only published/visible content where applicable, keeping payloads small.
+- `REQUEST_BODY_LIMIT` defaults to `50mb`; the frontend also compresses uploaded images before sending them.
+
 ## API Overview
 
 Public routes are mounted under `/api/public`.
@@ -110,9 +117,12 @@ Public routes are mounted under `/api/public`.
 | ------ | --------------- | ------------------------------ |
 | `GET`  | `/hero`         | Get hero content               |
 | `GET`  | `/projects`     | Get published visible projects |
+| `GET`  | `/services`     | Get published visible services |
+| `GET`  | `/products`     | Get published visible products |
 | `GET`  | `/articles`     | Get published articles         |
 | `GET`  | `/testimonials` | Get visible testimonials       |
 | `GET`  | `/about`        | Get about page content         |
+| `GET`  | `/gitHubStats`  | Get current-year GitHub stats  |
 | `POST` | `/messages`     | Submit a contact message       |
 | `POST` | `/visit`        | Record a site visit            |
 
@@ -125,6 +135,8 @@ Admin routes are mounted under `/api/admin`. Protected routes require an `Author
 | `POST`                         | `/logout`                  | Clear the auth cookie                                                                            |
 | `GET`, `PUT`                   | `/hero`                    | Read/update hero content                                                                         |
 | `GET`, `POST`, `PUT`, `DELETE` | `/projects`                | Manage projects                                                                                  |
+| `GET`, `POST`, `PUT`, `DELETE` | `/services`                | Manage services                                                                                  |
+| `GET`, `POST`, `PUT`, `DELETE` | `/products`                | Manage products                                                                                  |
 | `GET`, `POST`, `PUT`, `DELETE` | `/articles`                | Manage articles                                                                                  |
 | `GET`, `POST`, `PUT`, `DELETE` | `/testimonials`            | Manage testimonials                                                                              |
 | `GET`, `POST`, `PUT`, `DELETE` | `/about`                   | Manage about content                                                                             |
@@ -132,7 +144,6 @@ Admin routes are mounted under `/api/admin`. Protected routes require an `Author
 | `GET`                          | `/messages/stats`          | View message totals                                                                              |
 | `PUT`                          | `/messages/:id`            | Mark a message as read                                                                           |
 | `GET`                          | `/analytics/site-visits`   | View visit analytics                                                                             |
-| `GET`                          | `/api/public/github-stats` | Get commit count for current year, total projects, and technologies used across all public repos |
 
 For `PUT` and `DELETE` routes that operate on a single item, pass the item id as `/:id`.
 

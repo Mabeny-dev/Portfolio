@@ -20,95 +20,95 @@ async function main() {
   //   },
   // });
 
-  const existingAboutContent = await prisma.aboutContent.findFirst({
-    select: { id: true },
-  });
+  // const existingAboutContent = await prisma.aboutContent.findFirst({
+  //   select: { id: true },
+  // });
 
-  // Seed the About page once with nested sections that match the admin form.
-  if (!existingAboutContent) {
-    await prisma.aboutContent.create({
-      data: {
-        bio: `I'm John Mabeny, a fullstack developer who turns ideas into reliable, production-ready software. I specialize in React, Node.js, and PostgreSQL, with a focus on clean architecture, intuitive design, and performance. Whether it's a customer-facing product, an internal tool, or an API powering millions of requests, I care about thoughtful implementation and maintainable systems.`,
-        skills: {
-          create: [
-            {
-              category: "Frontend",
-              items: [
-                "HTML / CSS",
-                "React",
-                "Next.js",
-                "TypeScript",
-                "Tailwind CSS",
-              ],
-            },
-            {
-              category: "Backend",
-              items: ["Node.js", "Express", "REST APIs", "Authentication"],
-            },
-            {
-              category: "Database",
-              items: ["PostgreSQL", "Prisma", "Database Design"],
-            },
-          ],
-        },
-        experiences: {
-          create: [
-            {
-              role: "Fullstack Developer",
-              company: "Freelance",
-              period: "2023 - Present",
-              description:
-                "Building web applications for clients across various industries.",
-            },
-            {
-              role: "Frontend Developer",
-              company: "Tech Startup",
-              period: "2022 - 2023",
-              description:
-                "Developed and maintained React-based dashboards and customer-facing apps.",
-            },
-          ],
-        },
-        educations: {
-          create: [
-            {
-              degree: "B.Sc. Computer Science",
-              school: "University of Dodoma",
-              year: "2022",
-            },
-          ],
-        },
-        achievements: {
-          create: [
-            {
-              issuer: "Open Source Contributor",
-              year: "2023",
-            },
-            {
-              issuer: "GitHub",
-              year: "2023",
-            },
-          ],
-        },
-        languages: {
-          create: [
-            {
-              name: "English",
-              proficiency: "Native",
-            },
-            {
-              name: "Swahili",
-              proficiency: "Native",
-            },
-            {
-              name: "French",
-              proficiency: "Conversational",
-            },
-          ],
-        },
-      },
-    });
-  }
+  // // Seed the About page once with nested sections that match the admin form.
+  // if (!existingAboutContent) {
+  //   await prisma.aboutContent.create({
+  //     data: {
+  //       bio: `I'm John Mabeny, a fullstack developer who turns ideas into reliable, production-ready software. I specialize in React, Node.js, and PostgreSQL, with a focus on clean architecture, intuitive design, and performance. Whether it's a customer-facing product, an internal tool, or an API powering millions of requests, I care about thoughtful implementation and maintainable systems.`,
+  //       skills: {
+  //         create: [
+  //           {
+  //             category: "Frontend",
+  //             items: [
+  //               "HTML / CSS",
+  //               "React",
+  //               "Next.js",
+  //               "TypeScript",
+  //               "Tailwind CSS",
+  //             ],
+  //           },
+  //           {
+  //             category: "Backend",
+  //             items: ["Node.js", "Express", "REST APIs", "Authentication"],
+  //           },
+  //           {
+  //             category: "Database",
+  //             items: ["PostgreSQL", "Prisma", "Database Design"],
+  //           },
+  //         ],
+  //       },
+  //       experiences: {
+  //         create: [
+  //           {
+  //             role: "Fullstack Developer",
+  //             company: "Freelance",
+  //             period: "2023 - Present",
+  //             description:
+  //               "Building web applications for clients across various industries.",
+  //           },
+  //           {
+  //             role: "Frontend Developer",
+  //             company: "Tech Startup",
+  //             period: "2022 - 2023",
+  //             description:
+  //               "Developed and maintained React-based dashboards and customer-facing apps.",
+  //           },
+  //         ],
+  //       },
+  //       educations: {
+  //         create: [
+  //           {
+  //             degree: "B.Sc. Computer Science",
+  //             school: "University of Dodoma",
+  //             year: "2022",
+  //           },
+  //         ],
+  //       },
+  //       achievements: {
+  //         create: [
+  //           {
+  //             issuer: "Open Source Contributor",
+  //             year: "2023",
+  //           },
+  //           {
+  //             issuer: "GitHub",
+  //             year: "2023",
+  //           },
+  //         ],
+  //       },
+  //       languages: {
+  //         create: [
+  //           {
+  //             name: "English",
+  //             proficiency: "Native",
+  //           },
+  //           {
+  //             name: "Swahili",
+  //             proficiency: "Native",
+  //           },
+  //           {
+  //             name: "French",
+  //             proficiency: "Conversational",
+  //           },
+  //         ],
+  //       },
+  //     },
+  //   });
+  // }
 
   //   const projects = [
   //     {
@@ -152,6 +152,52 @@ async function main() {
   //   });
 
   //   console.log("Seeding finished.");
+
+  const products = [
+    {
+      name: "Officera",
+      tagline: "NGO data collection, simplified.",
+      description:
+        "A field-friendly platform that helps NGOs collect, organize, and aggregate data with confidence. Built for low-bandwidth environments with offline sync capabilities.",
+      year: 2026,
+      status: "PUBLISHED",
+      isVisible: true,
+      tags: ["React", "Express", "Prisma", "PostgreSQL", "Offline-Sync"],
+      liveUrl: "https://example.com",
+      image: "https://unsplash.com",
+    },
+    {
+      name: "FinFlow",
+      tagline: "Automated treasury for startups.",
+      description:
+        "An AI-powered cashflow forecasting engine. Connects seamlessly to banking APIs to predict runway, categorize operational expenses, and generate investor-ready reports.",
+      year: 2025,
+      status: "PUBLISHED",
+      isVisible: true,
+      tags: ["Next.js", "FastAPI", "Python", "Tailwind", "AI"],
+      liveUrl: "https://example.com",
+      image: "https://unsplash.com",
+    },
+    {
+      name: "EcoTrack API",
+      tagline: "Carbon footprint accounting ledger.",
+      description:
+        "A robust developer API built to track enterprise logistical carbon footprints. Includes certified calculation webhooks for global freight operations.",
+      year: 2026,
+      status: "DRAFT",
+      isVisible: false,
+      tags: ["Node.js", "TypeScript", "GraphQL", "AWS"],
+      liveUrl: "https://example.com",
+      image: null,
+    },
+  ];
+
+  for (const product of products) {
+    const created = await prisma.product.create({ data: product });
+    console.log(`✅ Created product: ${created.name}`);
+  }
+
+  console.log("🏁 Seeding finished successfully!");
 }
 
 main()

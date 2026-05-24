@@ -13,6 +13,13 @@ export const errorHandler = (err, req, res, next) => {
     });
   }
 
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({
+      message:
+        "Uploaded content is too large. Use a smaller image or increase REQUEST_BODY_LIMIT.",
+    });
+  }
+
   return res.status(500).json({
     message: err.message || "Internal Server Error",
   });

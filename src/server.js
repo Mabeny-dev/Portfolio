@@ -8,6 +8,7 @@ import publicRoutes from "./routes/publicRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const REQUEST_BODY_LIMIT = process.env.REQUEST_BODY_LIMIT || "50mb";
 
 const getAllowedOrigins = () => {
   const configuredOrigins =
@@ -47,8 +48,14 @@ app.use(
 app.set("trust proxy", true);
 
 // Body parsing middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: REQUEST_BODY_LIMIT }));
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: REQUEST_BODY_LIMIT,
+    parameterLimit: 100000,
+  }),
+);
 
 // Routes
 app.get("/health", (req, res) => {

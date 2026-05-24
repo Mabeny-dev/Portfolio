@@ -7,6 +7,8 @@ import { getArticlePublic } from "../controllers/public/articleController.js";
 import { getTestimonialPublic } from "../controllers/public/testimonialsController.js";
 import { getAboutPublic } from "../controllers/public/aboutController.js";
 import { getYearlyGitHubStats } from "../controllers/public/githubController.js";
+import { getAllProductsPublic } from "../controllers/public/productsController.js";
+import { getAllServicesPublic } from "../controllers/public/servicesController.js";
 
 const router = express.Router();
 
@@ -19,5 +21,7 @@ router.get("/articles", getArticlePublic);
 router.get("/testimonials", getTestimonialPublic);
 router.get("/about", getAboutPublic);
 router.get("/gitHubStats", getYearlyGitHubStats);
+router.get("/products", getAllProductsPublic);
+router.get("/services", getAllServicesPublic);
 
 export default router;

@@ -39,6 +39,20 @@ import {
   getAboutAdmin,
   updateAbout,
 } from "../controllers/admin/aboutController.js";
+import {
+  createProduct,
+  deleteProduct,
+  getAllProducts,
+  getProduct,
+  updateProduct,
+} from "../controllers/admin/productsController.js";
+import {
+  createService,
+  deleteService,
+  getAllServices,
+  getService,
+  updateService,
+} from "../controllers/admin/servicesController.js";
 
 const router = express.Router();
 
@@ -81,5 +95,19 @@ router.get("/about", protect, getAboutAdmin);
 router.post("/about", protect, createAbout);
 router.put("/about/:id", protect, updateAbout);
 router.delete("/about/:id", protect, deleteAbout);
+
+// Products routes
+router.get("/products", protect, getAllProducts);
+router.get("/products/:id", protect, getProduct);
+router.post("/products", protect, createProduct);
+router.put("/products/:id", protect, updateProduct);
+router.delete("/products/:id", protect, deleteProduct);
+
+// Services routes
+router.get("/services", protect, getAllServices);
+router.get("/services/:id", protect, getService);
+router.post("/services", protect, createService);
+router.put("/services/:id", protect, updateService);
+router.delete("/services/:id", protect, deleteService);
 
 export default router;
