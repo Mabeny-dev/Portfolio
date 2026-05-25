@@ -160,8 +160,7 @@ async function main() {
       description:
         "A field-friendly platform that helps NGOs collect, organize, and aggregate data with confidence. Built for low-bandwidth environments with offline sync capabilities.",
       year: 2026,
-      status: "PUBLISHED",
-      isVisible: true,
+      status: "Published",
       tags: ["React", "Express", "Prisma", "PostgreSQL", "Offline-Sync"],
       liveUrl: "https://example.com",
       image: "https://unsplash.com",
@@ -172,8 +171,7 @@ async function main() {
       description:
         "An AI-powered cashflow forecasting engine. Connects seamlessly to banking APIs to predict runway, categorize operational expenses, and generate investor-ready reports.",
       year: 2025,
-      status: "PUBLISHED",
-      isVisible: true,
+      status: "Published",
       tags: ["Next.js", "FastAPI", "Python", "Tailwind", "AI"],
       liveUrl: "https://example.com",
       image: "https://unsplash.com",
@@ -184,8 +182,7 @@ async function main() {
       description:
         "A robust developer API built to track enterprise logistical carbon footprints. Includes certified calculation webhooks for global freight operations.",
       year: 2026,
-      status: "DRAFT",
-      isVisible: false,
+      status: "Draft",
       tags: ["Node.js", "TypeScript", "GraphQL", "AWS"],
       liveUrl: "https://example.com",
       image: null,
@@ -193,7 +190,7 @@ async function main() {
   ];
 
   for (const product of products) {
-    const created = await prisma.product.create({ data: product });
+    const created = await prisma.product;
     console.log(`✅ Created product: ${created.name}`);
   }
 

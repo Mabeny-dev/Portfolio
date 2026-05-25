@@ -53,11 +53,12 @@ import {
   getService,
   updateService,
 } from "../controllers/admin/servicesController.js";
+import { loginLimiter } from "../utils/rateLimiter.js";
 
 const router = express.Router();
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", protect, register);
+router.post("/login", loginLimiter, login);
 router.post("/logout", protect, logout);
 
 // Hero Content
