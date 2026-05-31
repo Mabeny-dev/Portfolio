@@ -81,4 +81,29 @@ const markAsRead = async (req, res) => {
   }
 };
 
-export { getMessages, getMessageStats, markAsRead };
+/**
+ * DELETE MESSAGE
+ * Permanently removes a contact message from the database.
+ */
+const deleteMessage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await prisma.contactMessage.delete({
+      where: { id },
+    });
+
+    res.json({
+      status: "SUCCESS",
+      message: "Message deleted successfully",
+    });
+  } catch (err) {
+    if (err.code === "P2025") {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export { getMessages, getMessageStats, markAsRead, deleteMessage };

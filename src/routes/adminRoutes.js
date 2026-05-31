@@ -16,6 +16,7 @@ import {
   updateProject,
 } from "../controllers/admin/projectController.js";
 import {
+  deleteMessage,
   getMessages,
   getMessageStats,
   markAsRead,
@@ -75,6 +76,7 @@ router.delete("/projects/:id", protect, deleteProject);
 router.get("/messages", protect, getMessages);
 router.get("/messages/stats", protect, getMessageStats);
 router.put("/messages/:id", protect, markAsRead);
+router.delete("/messages/:id", protect, deleteMessage);
 
 // Analytics routes
 router.get("/analytics/site-visits", protect, getSiteAnalytics);
