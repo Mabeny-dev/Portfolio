@@ -28,6 +28,7 @@ JWT_SECRET=generate_a_long_random_secret
 JWT_EXPIRES_IN=7d
 CLIENT_URLS=https://your-frontend.onrender.com
 REQUEST_BODY_LIMIT=50mb
+GITHUB_USERNAME=Mabeny-dev
 GITHUB_TOKEN=optional_github_token
 ```
 

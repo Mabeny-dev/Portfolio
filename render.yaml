@@ -20,5 +20,7 @@ services:
         sync: false
       - key: REQUEST_BODY_LIMIT
         value: 50mb
+      - key: GITHUB_USERNAME
+        value: Mabeny-dev
       - key: GITHUB_TOKEN
         sync: false

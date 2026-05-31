@@ -46,6 +46,8 @@ Optional variables:
 - `CLIENT_URLS`: Comma-separated allowed frontend origins for CORS.
 - `JWT_EXPIRES_IN`: Token lifetime. Defaults to `7d`.
 - `REQUEST_BODY_LIMIT`: Maximum JSON/form payload size. Defaults to `50mb`.
+- `GITHUB_USERNAME`: GitHub username used for homepage commit stats. Defaults to `Mabeny-dev`.
+- `GITHUB_TOKEN`: Optional GitHub token for higher GitHub API rate limits.
 
 ## Scripts
 
