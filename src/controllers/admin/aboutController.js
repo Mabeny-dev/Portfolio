@@ -34,6 +34,7 @@ const normalizeEducation = (education) => ({
 });
 
 const normalizeAchievement = (achievement) => ({
+  title: achievement.title.trim(),
   issuer: achievement.issuer.trim(),
   year: achievement.year.trim(),
 });
@@ -122,8 +123,10 @@ const validateAboutPayload = (body) => {
 
   for (const achievement of achievements) {
     if (
+      !isString(achievement?.title) ||
       !isString(achievement?.issuer) ||
       !isString(achievement?.year) ||
+      achievement.title.trim().length === 0 ||
       achievement.issuer.trim().length === 0 ||
       achievement.year.trim().length === 0
     ) {

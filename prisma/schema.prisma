@@ -100,6 +100,7 @@ model Education {
 // ─── Achievement ───
 model Achievement {
   id             String        @id @default(uuid())
+  title          String?
   issuer         String
   year           String
   aboutContentId String?
