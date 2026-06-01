@@ -57,7 +57,7 @@ Migration: `npx prisma migrate dev --name init`
 Generation: `npx prisma generate`
 
 ## 5. Folder structure
-
+```
 portfolio-backend/
 │
 ├── src/
@@ -103,3 +103,4 @@ portfolio-backend/
 ├── package.json # NPM dependencies
 ├── package-lock.json # Lock file
 └── README.md # Project documentation
+```
