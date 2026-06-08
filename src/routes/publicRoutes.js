@@ -9,6 +9,7 @@ import { getAboutPublic } from "../controllers/public/aboutController.js";
 import { getYearlyGitHubStats } from "../controllers/public/githubController.js";
 import { getAllProductsPublic } from "../controllers/public/productsController.js";
 import { getAllServicesPublic } from "../controllers/public/servicesController.js";
+import { subscribe } from "../controllers/public/newsletterController.js";
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ router.get("/about", getAboutPublic);
 router.get("/gitHubStats", getYearlyGitHubStats);
 router.get("/products", getAllProductsPublic);
 router.get("/services", getAllServicesPublic);
+router.post("/subscribe", subscribe);
 
 export default router;

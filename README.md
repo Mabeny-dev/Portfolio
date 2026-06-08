@@ -1,6 +1,6 @@
 # Portfolio Backend
 
-Express and Prisma backend for my portfolio website. It provides public portfolio content APIs, admin-only content management APIs, contact message storage, and basic visitor analytics.
+Express and Prisma backend for my portfolio website. It provides public portfolio content APIs, admin-only content management APIs, contact message and newsletter subscriber storage, and visitor analytics.
 
 ## Tech Stack
 
@@ -48,6 +48,10 @@ Optional variables:
 - `REQUEST_BODY_LIMIT`: Maximum JSON/form payload size. Defaults to `50mb`.
 - `GITHUB_USERNAME`: GitHub username used for homepage commit stats. Defaults to `Mabeny-dev`.
 - `GITHUB_TOKEN`: Optional GitHub token for higher GitHub API rate limits.
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`: SMTP server connection settings.
+- `SMTP_USER`, `SMTP_PASS`: Credentials for the mailbox or transactional email provider.
+- `MAIL_FROM_NAME`, `MAIL_FROM_EMAIL`, `MAIL_REPLY_TO`: Welcome-email sender details.
+- `WEBSITE_URL`: Public website URL used in newsletter emails.
 
 ## Scripts
 
@@ -108,6 +112,7 @@ GET /health
 ## Performance Notes
 
 - Public product and service queries are indexed by `status`, `isVisible`, and descending `createdAt`.
+- Newsletter emails are normalized to lowercase and uniquely indexed to prevent duplicate subscribers.
 - Public endpoints return only published/visible content where applicable, keeping payloads small.
 - `REQUEST_BODY_LIMIT` defaults to `50mb`; the frontend also compresses uploaded images before sending them.
 
@@ -126,6 +131,7 @@ Public routes are mounted under `/api/public`.
 | `GET`  | `/about`        | Get about page content         |
 | `GET`  | `/gitHubStats`  | Get current-year GitHub stats  |
 | `POST` | `/messages`     | Submit a contact message       |
+| `POST` | `/subscribe`    | Subscribe an email to the newsletter |
 | `POST` | `/visit`        | Record a site visit            |
 
 Admin routes are mounted under `/api/admin`. Protected routes require an `Authorization: Bearer <token>` header.
@@ -145,14 +151,44 @@ Admin routes are mounted under `/api/admin`. Protected routes require an `Author
 | `GET`                          | `/messages`                | View contact messages                                                                            |
 | `GET`                          | `/messages/stats`          | View message totals                                                                              |
 | `PUT`                          | `/messages/:id`            | Mark a message as read                                                                           |
+| `DELETE`                       | `/messages/:id`            | Delete a contact message                                                                         |
+| `GET`                          | `/subscribers`             | List newsletter subscribers                                                                      |
+| `DELETE`                       | `/subscribers/:id`         | Delete a newsletter subscriber                                                                   |
 | `GET`                          | `/analytics/site-visits`   | View visit analytics                                                                             |
 
 For `PUT` and `DELETE` routes that operate on a single item, pass the item id as `/:id`.
+
+## Newsletter Flow
+
+Public signup accepts:
+
+```http
+POST /api/public/subscribe
+Content-Type: application/json
+
+{
+  "email": "reader@example.com"
+}
+```
+
+Emails are trimmed and lowercased before storage. Repeating an existing signup is safe and returns the existing subscriber instead of creating a duplicate. When available, the API stores a country, city, country code, and visitor relation alongside the subscription.
+
+After a new subscription, the API sends a branded HTML and plain-text welcome email from `info@johnmabeny.com`. Successful delivery is recorded in `welcomeEmailSentAt`; if SMTP is temporarily unavailable, the subscriber remains saved and a later signup attempt can retry the welcome email.
+
+The domain currently uses Zoho Mail, so the included defaults use `smtp.zoho.com` on port `587` with `SMTP_SECURE=false`. Set `SMTP_PASS` to a Zoho app password for `info@johnmabeny.com`. Port `465` can also be used with `SMTP_SECURE=true`. Never commit the real mailbox password or app password.
+
+The protected admin endpoints return subscribers newest first and allow records to be removed:
+
+```text
+GET    /api/admin/subscribers
+DELETE /api/admin/subscribers/:id
+```
 
 ## Security Notes
 
 - Keep `JWT_SECRET` private and rotate it if it is ever exposed.
 - Restrict `CLIENT_URLS` to your deployed frontend domains in production.
+- Public routes, including newsletter signup, use the shared API rate limiter.
 - The admin registration route is available at `/api/admin/register`; remove or protect it after creating your production admin account if public self-registration is not desired.
 
 ## Notes

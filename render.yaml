@@ -24,3 +24,21 @@ services:
         value: Mabeny-dev
       - key: GITHUB_TOKEN
         sync: false
+      - key: SMTP_HOST
+        value: smtp.zoho.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: false
+      - key: SMTP_USER
+        value: info@johnmabeny.com
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: John Mabeny
+      - key: MAIL_FROM_EMAIL
+        value: info@johnmabeny.com
+      - key: MAIL_REPLY_TO
+        value: info@johnmabeny.com
+      - key: WEBSITE_URL
+        value: https://www.johnmabeny.com

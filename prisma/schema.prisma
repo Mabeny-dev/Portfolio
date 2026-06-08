@@ -188,15 +188,16 @@ model Project {
 /////////////////////////////////
 
 model Visitor {
-  id          String           @id @default(uuid())
+  id          String                 @id @default(uuid())
   ipAddress   String
   country     String?
   city        String?
   userAgent   String?
   countryCode String?
-  createdAt   DateTime         @default(now())
+  createdAt   DateTime               @default(now())
   visits      SiteVisit[]
   messages    ContactMessage[]
+  subscribers NewsletterSubscriber[]
 
   @@index([ipAddress])
   @@index([countryCode])
@@ -211,6 +212,26 @@ model SiteVisit {
 
   @@index([visitorId])
   @@index([createdAt(sort: Desc)])
+}
+
+/////////////////////////////////
+//    NEWSLETTER SUBSCRIBER
+/////////////////////////////////
+
+model NewsletterSubscriber {
+  id                 String    @id @default(uuid())
+  email              String    @unique
+  country            String?
+  city               String?
+  countryCode        String?
+  welcomeEmailSentAt DateTime?
+  createdAt          DateTime  @default(now())
+
+  visitorId String?
+  visitor   Visitor? @relation(fields: [visitorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([countryCode])
 }
 
 /////////////////////////////////

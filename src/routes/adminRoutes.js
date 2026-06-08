@@ -54,6 +54,10 @@ import {
   getService,
   updateService,
 } from "../controllers/admin/servicesController.js";
+import {
+  deleteSubscriber,
+  getSubscribers,
+} from "../controllers/admin/newsletterController.js";
 import { loginLimiter } from "../utils/rateLimiter.js";
 
 const router = express.Router();
@@ -77,6 +81,10 @@ router.get("/messages", protect, getMessages);
 router.get("/messages/stats", protect, getMessageStats);
 router.put("/messages/:id", protect, markAsRead);
 router.delete("/messages/:id", protect, deleteMessage);
+
+// Newsletter subscriber routes
+router.get("/subscribers", protect, getSubscribers);
+router.delete("/subscribers/:id", protect, deleteSubscriber);
 
 // Analytics routes
 router.get("/analytics/site-visits", protect, getSiteAnalytics);
