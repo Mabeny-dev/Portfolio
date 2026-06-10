@@ -2,10 +2,10 @@ export const getYearlyGitHubStats = async (req, res) => {
   try {
     const token = process.env.GITHUB_TOKEN;
 
-    // Temporary Test
-    console.log("Using token:", !!token);
-    console.log("GitHub status:", response.status);
-    console.log("GitHub message:", data.message);
+    // // Temporary Test
+    // console.log("Using token:", !!token);
+    // console.log("GitHub status:", response.status);
+    // console.log("GitHub message:", data.message);
 
     const username = process.env.GITHUB_USERNAME || "Mabeny-dev";
     const currentYear = new Date().getFullYear();
@@ -46,6 +46,10 @@ export const getYearlyGitHubStats = async (req, res) => {
       year: currentYear,
     });
   } catch (error) {
-    return res.status(500).json({ error: "Failed to fetch commit stats" });
+    console.error("GitHub stats error:", error);
+
+    return res.status(500).json({
+      error: error.message,
+    });
   }
 };
