@@ -1,6 +1,12 @@
 export const getYearlyGitHubStats = async (req, res) => {
   try {
     const token = process.env.GITHUB_TOKEN;
+
+    // Temporary Test
+    console.log("Using token:", !!token);
+    console.log("GitHub status:", response.status);
+    console.log("GitHub message:", data.message);
+
     const username = process.env.GITHUB_USERNAME || "Mabeny-dev";
     const currentYear = new Date().getFullYear();
     const startOfYear = `${currentYear}-01-01`;
@@ -32,6 +38,8 @@ export const getYearlyGitHubStats = async (req, res) => {
         error: data.message || "Failed to fetch commit stats",
       });
     }
+
+    console.log(data);
 
     return res.json({
       commitsThisYear: data.total_count || 0,
