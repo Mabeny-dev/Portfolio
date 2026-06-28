@@ -10,6 +10,8 @@ import prisma from "../../../prisma/prisma.client.js";
  */
 export const getSiteAnalytics = async (req, res) => {
   try {
+    res.set("Cache-Control", "no-store");
+
     const now = new Date();
 
     // Start of month

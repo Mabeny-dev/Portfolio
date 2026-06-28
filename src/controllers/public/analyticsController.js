@@ -4,6 +4,8 @@ import { getOrCreateVisitor } from "../../utils/getOrCreateVisitor.js";
 
 const recordSiteVisit = async (req, res) => {
   try {
+    res.set("Cache-Control", "no-store");
+
     const ip = getClientIp(req);
     const visitor = await getOrCreateVisitor(ip, req);
 

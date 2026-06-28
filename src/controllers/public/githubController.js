@@ -1,5 +1,28 @@
+const githubStatsCache = {
+  value: null,
+  expiresAt: 0,
+};
+
+const getCacheTtlMs = () =>
+  (Number(process.env.GITHUB_STATS_CACHE_MINUTES) || 60) * 60 * 1000;
+
+const getCachedStats = () => {
+  if (githubStatsCache.value && githubStatsCache.expiresAt > Date.now()) {
+    return githubStatsCache.value;
+  }
+
+  return null;
+};
+
 export const getYearlyGitHubStats = async (req, res) => {
   try {
+    res.set("Cache-Control", "private, no-cache, must-revalidate");
+
+    const cachedStats = getCachedStats();
+    if (cachedStats) {
+      return res.json({ ...cachedStats, cached: true });
+    }
+
     const token = process.env.GITHUB_TOKEN;
 
     // // Temporary Test
@@ -26,30 +49,57 @@ export const getYearlyGitHubStats = async (req, res) => {
       headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(url, {
-      headers,
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    let response;
+
+    try {
+      response = await fetch(url, {
+        headers,
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
 
     const data = await response.json();
 
     if (!response.ok) {
       console.error("GitHub stats request failed:", response.status, data);
-      return res.status(response.status).json({
-        error: data.message || "Failed to fetch commit stats",
+
+      if (githubStatsCache.value) {
+        return res.json({ ...githubStatsCache.value, cached: true, stale: true });
+      }
+
+      return res.json({
+        commitsThisYear: 0,
+        year: currentYear,
+        cached: false,
+        unavailable: true,
       });
     }
 
-    console.log(data);
-
-    return res.json({
+    const stats = {
       commitsThisYear: data.total_count || 0,
       year: currentYear,
-    });
+    };
+
+    githubStatsCache.value = stats;
+    githubStatsCache.expiresAt = Date.now() + getCacheTtlMs();
+
+    return res.json({ ...stats, cached: false });
   } catch (error) {
     console.error("GitHub stats error:", error);
 
-    return res.status(500).json({
-      error: error.message,
+    if (githubStatsCache.value) {
+      return res.json({ ...githubStatsCache.value, cached: true, stale: true });
+    }
+
+    return res.json({
+      commitsThisYear: 0,
+      year: new Date().getFullYear(),
+      cached: false,
+      unavailable: true,
     });
   }
 };

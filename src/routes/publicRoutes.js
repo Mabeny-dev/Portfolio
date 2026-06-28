@@ -10,11 +10,13 @@ import { getYearlyGitHubStats } from "../controllers/public/githubController.js"
 import { getAllProductsPublic } from "../controllers/public/productsController.js";
 import { getAllServicesPublic } from "../controllers/public/servicesController.js";
 import { subscribe } from "../controllers/public/newsletterController.js";
+import { apiLimiter, visitLimiter } from "../utils/rateLimiter.js";
 
 const router = express.Router();
 
 // The frontend should call this once per page load to record a single visit.
-router.post("/visit", recordSiteVisit);
+router.post("/visit", visitLimiter, recordSiteVisit);
+router.use(apiLimiter);
 router.get("/hero", getHeroContent);
 router.get("/projects", getProjects);
 router.post("/messages", sendMessage);

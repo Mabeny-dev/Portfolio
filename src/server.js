@@ -7,7 +7,6 @@ import { connectDB, disconnectDB } from "../prisma/db.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import publicRoutes from "./routes/publicRoutes.js";
-import { apiLimiter } from "./utils/rateLimiter.js";
 
 const app = express();
 app.use(helmet());
@@ -70,7 +69,7 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.use("/api/public", apiLimiter, publicRoutes);
+app.use("/api/public", publicRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use(notFoundHandler);

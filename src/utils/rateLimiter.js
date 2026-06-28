@@ -15,7 +15,7 @@ const loginLimiter = rateLimit({
 
 const apiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 Minute
-  max: 100,
+  max: Number(process.env.PUBLIC_API_RATE_LIMIT_MAX) || 300,
   message: {
     error: "Too many requests. Please slow down.",
   },
@@ -23,4 +23,14 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-export { loginLimiter, apiLimiter };
+const visitLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: Number(process.env.VISIT_RATE_LIMIT_MAX) || 60,
+  message: {
+    error: "Too many visit requests. Please slow down.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+export { loginLimiter, apiLimiter, visitLimiter };
