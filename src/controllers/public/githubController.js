@@ -4,7 +4,7 @@ const githubStatsCache = {
 };
 
 const getCacheTtlMs = () =>
-  (Number(process.env.GITHUB_STATS_CACHE_MINUTES) || 60) * 60 * 1000;
+  (Number(process.env.GITHUB_STATS_CACHE_MINUTES) || 5) * 60 * 1000;
 
 const getCachedStats = () => {
   if (githubStatsCache.value && githubStatsCache.expiresAt > Date.now()) {
@@ -16,9 +16,10 @@ const getCachedStats = () => {
 
 export const getYearlyGitHubStats = async (req, res) => {
   try {
-    res.set("Cache-Control", "private, no-cache, must-revalidate");
+    res.set("Cache-Control", "no-store");
 
-    const cachedStats = getCachedStats();
+    const shouldRefresh = req.query.refresh === "true";
+    const cachedStats = shouldRefresh ? null : getCachedStats();
     if (cachedStats) {
       return res.json({ ...cachedStats, cached: true });
     }
@@ -82,6 +83,7 @@ export const getYearlyGitHubStats = async (req, res) => {
     const stats = {
       commitsThisYear: data.total_count || 0,
       year: currentYear,
+      lastFetchedAt: new Date().toISOString(),
     };
 
     githubStatsCache.value = stats;

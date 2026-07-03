@@ -19,20 +19,47 @@ const getAllowedOrigins = () => {
   const configuredOrigins =
     process.env.CLIENT_URLS ||
     process.env.CLIENT_URL ||
-    process.env.CORS_ORIGIN;
+    process.env.CORS_ORIGIN ||
+    process.env.WEBSITE_URL;
+
+  const origins = new Set();
+  const addOrigin = (origin) => {
+    if (!origin) {
+      return;
+    }
+
+    try {
+      const parsedOrigin = new URL(origin.trim());
+      const normalizedOrigin = parsedOrigin.origin;
+      origins.add(normalizedOrigin);
+
+      if (parsedOrigin.hostname.startsWith("www.")) {
+        parsedOrigin.hostname = parsedOrigin.hostname.replace(/^www\./, "");
+        origins.add(parsedOrigin.origin);
+      } else {
+        parsedOrigin.hostname = `www.${parsedOrigin.hostname}`;
+        origins.add(parsedOrigin.origin);
+      }
+    } catch {
+      console.warn(`Ignoring invalid CORS origin: ${origin}`);
+    }
+  };
 
   if (configuredOrigins) {
-    return configuredOrigins
+    configuredOrigins
       .split(",")
       .map((origin) => origin.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .forEach(addOrigin);
   }
 
   if (process.env.NODE_ENV === "production") {
-    return [];
+    return Array.from(origins);
   }
 
-  return ["http://localhost:8080", "http://localhost:3000"];
+  ["http://localhost:8080", "http://localhost:3000"].forEach(addOrigin);
+
+  return Array.from(origins);
 };
 
 const requiredEnvironmentVariables = ["DATABASE_URL", "JWT_SECRET"];
@@ -46,7 +73,13 @@ const allowedOrigins = getAllowedOrigins();
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );

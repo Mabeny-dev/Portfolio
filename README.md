@@ -50,10 +50,11 @@ Optional variables:
 - `REQUEST_BODY_LIMIT`: Maximum JSON/form payload size. Defaults to `50mb`.
 - `GITHUB_USERNAME`: GitHub username used for homepage commit stats. Defaults to `Mabeny-dev`.
 - `GITHUB_TOKEN`: Optional GitHub token for higher GitHub API rate limits.
+- `GITHUB_STATS_CACHE_MINUTES`: How long the backend caches GitHub stats. Defaults to `5`.
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`: SMTP server connection settings.
 - `SMTP_USER`, `SMTP_PASS`: Credentials for the mailbox or transactional email provider.
 - `MAIL_FROM_NAME`, `MAIL_FROM_EMAIL`, `MAIL_REPLY_TO`: Welcome-email sender details.
-- `WEBSITE_URL`: Public website URL used in newsletter emails.
+- `WEBSITE_URL`: Public website URL used in newsletter emails and as a CORS fallback.
 
 ## Scripts
 
