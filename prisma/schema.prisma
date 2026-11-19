@@ -33,6 +33,8 @@ model HeroContent {
   secondName String
   phrases    String[]
   subtitle   String
+  image      String?
+  imageAlt   String   @default("John Mabeny")
   uniqueKey  String   @unique @default("hero")
 }
 
