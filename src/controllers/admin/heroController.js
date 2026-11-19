@@ -17,7 +17,7 @@ const getHeroContent = async (req, res) => {
 };
 
 const updateHeroContent = async (req, res) => {
-  const { badge, firstName, secondName, phrases, subtitle } = req.body;
+  const { badge, firstName, secondName, phrases, subtitle, image, imageAlt } = req.body;
 
   if (!badge || !firstName || !secondName || !subtitle || !Array.isArray(phrases)) {
     return res.status(400).json({
@@ -28,13 +28,23 @@ const updateHeroContent = async (req, res) => {
   try {
     const hero = await prisma.heroContent.upsert({
       where: { uniqueKey: "hero" },
-      update: { badge, firstName, secondName, phrases, subtitle },
+      update: {
+        badge,
+        firstName,
+        secondName,
+        phrases,
+        subtitle,
+        image: image ?? null,
+        imageAlt: imageAlt?.trim() || "John Mabeny",
+      },
       create: {
         badge,
         firstName,
         secondName,
         phrases,
         subtitle,
+        image: image ?? null,
+        imageAlt: imageAlt?.trim() || "John Mabeny",
         uniqueKey: "hero",
       },
     });
