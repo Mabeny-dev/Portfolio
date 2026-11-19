@@ -9,6 +9,7 @@ import { getAboutPublic } from "../controllers/public/aboutController.js";
 import { getYearlyGitHubStats } from "../controllers/public/githubController.js";
 import { getAllProductsPublic } from "../controllers/public/productsController.js";
 import { getAllServicesPublic } from "../controllers/public/servicesController.js";
+import { getHomeContent } from "../controllers/admin/homeController.js";
 import { subscribe } from "../controllers/public/newsletterController.js";
 import { apiLimiter, visitLimiter } from "../utils/rateLimiter.js";
 
@@ -18,6 +19,7 @@ const router = express.Router();
 router.post("/visit", visitLimiter, recordSiteVisit);
 router.use(apiLimiter);
 router.get("/hero", getHeroContent);
+router.get("/home", getHomeContent);
 router.get("/projects", getProjects);
 router.post("/messages", sendMessage);
 router.get("/articles", getArticlePublic);

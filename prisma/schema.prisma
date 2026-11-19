@@ -38,6 +38,21 @@ model HeroContent {
   uniqueKey  String   @unique @default("hero")
 }
 
+// ─── Homepage Mission & Product Proof ───
+model HomeContent {
+  id                  String @id @default(uuid())
+  uniqueKey           String @unique @default("home")
+  missionEyebrow      String
+  missionTitle        String
+  missionParagraphOne String @db.Text
+  missionParagraphTwo String @db.Text
+  officeraUrl         String
+  junubyUrl           String
+  proofEyebrow        String
+  proofTitle          String
+  proofItems          Json
+}
+
 // ─── Testimonial ───
 model Testimonial {
   id        String   @id @default(uuid())

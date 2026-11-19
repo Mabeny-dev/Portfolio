@@ -59,6 +59,7 @@ import {
   getSubscribers,
 } from "../controllers/admin/newsletterController.js";
 import { loginLimiter } from "../utils/rateLimiter.js";
+import { getHomeContent, updateHomeContent } from "../controllers/admin/homeController.js";
 
 const router = express.Router();
 
@@ -69,6 +70,10 @@ router.post("/logout", protect, logout);
 // Hero Content
 router.get("/hero", protect, getHeroContent);
 router.put("/hero", protect, updateHeroContent);
+
+// Homepage mission and product proof
+router.get("/home", protect, getHomeContent);
+router.put("/home", protect, updateHomeContent);
 
 // Project routes
 router.post("/projects", protect, createProject);
