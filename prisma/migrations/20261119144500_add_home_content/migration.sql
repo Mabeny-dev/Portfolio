@@ -7,9 +7,6 @@ CREATE TABLE "HomeContent" (
     "missionParagraphTwo" TEXT NOT NULL,
     "officeraUrl" TEXT NOT NULL,
     "junubyUrl" TEXT NOT NULL,
-    "proofEyebrow" TEXT NOT NULL,
-    "proofTitle" TEXT NOT NULL,
-    "proofItems" JSONB NOT NULL,
 
     CONSTRAINT "HomeContent_pkey" PRIMARY KEY ("id")
 );
