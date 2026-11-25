@@ -7,7 +7,7 @@ import { getArticleDetailPublic, getArticlePublic } from "../controllers/public/
 import { getTestimonialPublic } from "../controllers/public/testimonialsController.js";
 import { getAboutPublic } from "../controllers/public/aboutController.js";
 import { getYearlyGitHubStats } from "../controllers/public/githubController.js";
-import { getAllProductsPublic } from "../controllers/public/productsController.js";
+import { getAllProductsPublic, getProductImagePublic } from "../controllers/public/productsController.js";
 import { getAllServicesPublic } from "../controllers/public/servicesController.js";
 import { getHomeContent } from "../controllers/admin/homeController.js";
 import { subscribe } from "../controllers/public/newsletterController.js";
@@ -28,6 +28,7 @@ router.get("/testimonials", getTestimonialPublic);
 router.get("/about", getAboutPublic);
 router.get("/gitHubStats", getYearlyGitHubStats);
 router.get("/products", getAllProductsPublic);
+router.get("/products/:id/image", getProductImagePublic);
 router.get("/services", getAllServicesPublic);
 router.post("/subscribe", subscribe);
 
