@@ -48,6 +48,13 @@ model HomeContent {
   missionParagraphTwo String @db.Text
   officeraUrl         String
   junubyUrl           String
+  audienceEyebrow     String @default("Who I serve")
+  audienceTitle       String @default("Who I Build For")
+  audienceIntro       String @default("I build practical, dependable technology for organizations that want to improve their operations, manage information clearly, and serve people more effectively.") @db.Text
+  audienceItems       Json   @default("[]")
+  audienceCtaTitle    String @default("Don’t see your organization listed?")
+  audienceCtaBody     String @default("If you have an operational problem that technology could simplify, let’s discuss it.") @db.Text
+  audienceCtaLabel    String @default("Discuss your needs")
   // Retained for compatibility with the original production table. The
   // current homepage no longer renders the former proof/statistics section.
   proofEyebrow        String @default("Selected work")
