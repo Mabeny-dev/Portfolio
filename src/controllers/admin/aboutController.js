@@ -47,6 +47,8 @@ const normalizeLanguage = (language) => ({
 const validateAboutPayload = (body) => {
   const {
     bio,
+    visionTitle,
+    visionBody,
     skills = [],
     experiences = [],
     educations = [],
@@ -56,6 +58,14 @@ const validateAboutPayload = (body) => {
 
   if (!isString(bio) || bio.trim().length === 0) {
     return { error: "bio is required" };
+  }
+
+  if (visionTitle != null && !isString(visionTitle)) {
+    return { error: "visionTitle must be a string" };
+  }
+
+  if (visionBody != null && !isString(visionBody)) {
+    return { error: "visionBody must be a string" };
   }
 
   if (!Array.isArray(skills)) {
@@ -152,6 +162,8 @@ const validateAboutPayload = (body) => {
   return {
     data: {
       bio: bio.trim(),
+      visionTitle: visionTitle?.trim() || null,
+      visionBody: visionBody?.trim() || null,
       skills: skills.map(normalizeSkill),
       experiences: experiences.map(normalizeExperience),
       educations: educations.map(normalizeEducation),
@@ -197,12 +209,14 @@ const createAbout = async (req, res) => {
       });
     }
 
-    const { bio, skills, experiences, educations, achievements, languages } =
+    const { bio, visionTitle, visionBody, skills, experiences, educations, achievements, languages } =
       validation.data;
 
     const aboutContent = await prisma.aboutContent.create({
       data: {
         bio,
+        visionTitle,
+        visionBody,
         skills: {
           create: skills,
         },
@@ -240,7 +254,7 @@ const updateAbout = async (req, res) => {
       return res.status(400).json({ message: validation.error });
     }
 
-    const { bio, skills, experiences, educations, achievements, languages } =
+    const { bio, visionTitle, visionBody, skills, experiences, educations, achievements, languages } =
       validation.data;
 
     // Replace nested collections inside a transaction so the About page never
@@ -279,7 +293,7 @@ const updateAbout = async (req, res) => {
 
       await tx.aboutContent.update({
         where: { id },
-        data: { bio },
+        data: { bio, visionTitle, visionBody },
       });
 
       if (skills.length > 0) {

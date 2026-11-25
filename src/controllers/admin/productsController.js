@@ -43,6 +43,13 @@ const createProduct = async (req, res) => {
       liveUrl,
       image,
       isVisible,
+      stage,
+      owner,
+      audience,
+      role,
+      capabilities,
+      challenge,
+      outcome,
     } = req.body;
 
     if (!name || !tagline || !description || !year) {
@@ -59,6 +66,11 @@ const createProduct = async (req, res) => {
             .filter(Boolean)
         : tags;
 
+    const capabilitiesArray =
+      typeof capabilities === "string"
+        ? capabilities.split(",").map((item) => item.trim()).filter(Boolean)
+        : capabilities;
+
     const newProduct = await prisma.product.create({
       data: {
         name,
@@ -70,6 +82,13 @@ const createProduct = async (req, res) => {
         liveUrl,
         image,
         isVisible: isVisible ?? true,
+        stage: stage || "LIVE",
+        owner: owner || null,
+        audience: audience || null,
+        role: role || null,
+        capabilities: capabilitiesArray || [],
+        challenge: challenge || null,
+        outcome: outcome || null,
       },
     });
     return res.status(201).json({ success: true, data: newProduct });
@@ -92,6 +111,13 @@ const updateProduct = async (req, res) => {
       liveUrl,
       image,
       isVisible,
+      stage,
+      owner,
+      audience,
+      role,
+      capabilities,
+      challenge,
+      outcome,
     } = req.body;
 
     const tagsArray =
@@ -101,6 +127,11 @@ const updateProduct = async (req, res) => {
             .map((t) => t.trim())
             .filter(Boolean)
         : tags;
+
+    const capabilitiesArray =
+      typeof capabilities === "string"
+        ? capabilities.split(",").map((item) => item.trim()).filter(Boolean)
+        : capabilities;
 
     const updatedProduct = await prisma.product.update({
       where: { id },
@@ -114,6 +145,13 @@ const updateProduct = async (req, res) => {
         liveUrl,
         image,
         isVisible,
+        stage,
+        owner,
+        audience,
+        role,
+        capabilities: capabilitiesArray,
+        challenge,
+        outcome,
       },
     });
     return res.status(200).json({ success: true, data: updatedProduct });
