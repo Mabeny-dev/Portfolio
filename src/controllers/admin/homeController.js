@@ -11,6 +11,11 @@ const defaults = {
     "Through Banjo Systems, I develop products such as Officera and Junuby—taking them from early ideas through design, engineering, deployment, and long-term operation.",
   officeraUrl: "https://officera.app",
   junubyUrl: "https://junuby.com",
+  // Legacy fields still exist as required columns in the production table.
+  // They are no longer rendered, but must receive values on the first save.
+  proofEyebrow: "Selected work",
+  proofTitle: "Products built for real needs.",
+  proofItems: [],
 };
 
 const getHomeContent = async (req, res) => {
@@ -45,7 +50,14 @@ const updateHomeContent = async (req, res) => {
       // HomeContent.id is required in PostgreSQL and its original migration
       // has no database-level default. Supplying it explicitly keeps the
       // first save reliable when Prisma takes the upsert create branch.
-      create: { id: randomUUID(), ...data, uniqueKey: "home" },
+      create: {
+        id: randomUUID(),
+        ...data,
+        uniqueKey: "home",
+        proofEyebrow: defaults.proofEyebrow,
+        proofTitle: defaults.proofTitle,
+        proofItems: defaults.proofItems,
+      },
     });
     return res.status(200).json({ home });
   } catch (error) {

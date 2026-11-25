@@ -48,6 +48,11 @@ model HomeContent {
   missionParagraphTwo String @db.Text
   officeraUrl         String
   junubyUrl           String
+  // Retained for compatibility with the original production table. The
+  // current homepage no longer renders the former proof/statistics section.
+  proofEyebrow        String @default("Selected work")
+  proofTitle          String @default("Products built for real needs.")
+  proofItems          Json   @default("[]")
 }
 
 // ─── Testimonial ───
