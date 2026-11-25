@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import prisma from "../../../prisma/prisma.client.js";
 
 const defaults = {
@@ -41,7 +42,10 @@ const updateHomeContent = async (req, res) => {
     const home = await prisma.homeContent.upsert({
       where: { uniqueKey: "home" },
       update: data,
-      create: { ...data, uniqueKey: "home" },
+      // HomeContent.id is required in PostgreSQL and its original migration
+      // has no database-level default. Supplying it explicitly keeps the
+      // first save reliable when Prisma takes the upsert create branch.
+      create: { id: randomUUID(), ...data, uniqueKey: "home" },
     });
     return res.status(200).json({ home });
   } catch (error) {
